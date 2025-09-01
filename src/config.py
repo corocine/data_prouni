@@ -1,7 +1,7 @@
 import pandas as pd
 import sqlite3
 from pathlib import Path
-from utils import *
+from utils import remove_accents, clean_phone, format_phone
 
 
 BASE_DIR = Path.cwd()
@@ -37,6 +37,14 @@ df_cursos['campus_nome'] = df_cursos['campus_nome'].str.strip()
 
 df_cursos['universidade_nome'] = df_cursos['universidade_nome'].fillna('Não especificado')
 df_cursos['universidade_nome'] = df_cursos['universidade_nome'].str.strip()
+
+df_cursos['nota_integral_ampla'] = df_cursos['nota_integral_ampla'].fillna('Não ofertado')
+
+df_cursos['nota_integral_cotas'] = df_cursos['nota_integral_cotas'].fillna('Não ofertado')
+
+df_cursos['nota_parcial_ampla'] = df_cursos['nota_parcial_ampla'].fillna('Não ofertado')
+
+df_cursos['nota_parcial_cotas'] = df_cursos['nota_parcial_cotas'].fillna('Não ofertado')
 
 scholarship_columns = [
     'bolsa_integral_cotas', 'bolsa_integral_ampla', 
@@ -90,7 +98,7 @@ df_enderecos['municipio_limpo'] = df_enderecos['municipio_limpo'].apply(remove_a
 df_enderecos['municipio_limpo']= df_enderecos['municipio_limpo'].str.title()
 
 df_enderecos['telefone'] = df_enderecos['telefone'].str.strip()
-df_enderecos['telefone'] = df_enderecos['telefone'].replace(['','00', '°', '-', 'S/n -', 'S/N', 'S/n', 'n/d'], 'Não especificado' )
+df_enderecos['telefone'] = df_enderecos['telefone'].replace(['','00','0', '°', '-', 'NI', '.','(A ) defi-nir.', 'A  def-inir', 'S/n -', 'S/N', 'S/n', 'n/d'], 'Não especificado' )
 df_enderecos['telefone_limpo'] = df_enderecos['telefone'].apply(clean_phone)
 df_enderecos['telefone_formatado'] = df_enderecos['telefone_limpo'].apply(format_phone)
 
