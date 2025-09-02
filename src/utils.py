@@ -9,9 +9,18 @@ import streamlit as st
 import locale
 
 def clean_phone(phone_column):
-    """
-    This function takes a value from the phone column, clears it and returns it,
-    but now IGNORE cleaning if it finds the word "extension".
+    """Clears and normalizes a phone number.
+
+    This function takes a value from the phone column, removes characters
+    non-numeric and returns it. Cleaning is skipped if the word "extension"
+    is found.
+
+    Args:
+        phone_column (str or float): The value of the phone to clear.
+
+    Returns:
+        str: The clean phone number or the original string if it contains "extension".
+             Returns 'Unspecified' if the input is null.
     """
     if pd.isna(phone_column):
         return 'Não especificado'
@@ -31,8 +40,14 @@ def clean_phone(phone_column):
         return phone_str
     
 def format_phone(clean_phone_column):
-    """
-    Improved formatting function to handle duplicate numbers and leading zeros.
+    """Formats a clean phone number to the Brazilian standard.
+
+    Args:
+        clean_phone_column (str): The clean phone number (digits only).
+
+    Returns:
+        str: The formatted phone number (ex: (XX) Y XXXX-XXXX) or
+             'Not specified' if the number is invalid.
     """
     if pd.isna(clean_phone_column):
         return np.nan
@@ -59,8 +74,13 @@ def format_phone(clean_phone_column):
     return phone
 
 def remove_accents(text):
-    """
-    Remove accents from words
+    """Removes accents from a text string.
+
+    Args:
+        text (str): The string to remove accents from.
+
+    Returns:
+        str: The string without accents.
     """
     # Normaliza a string para a forma 'NFKD' que separa as letras dos acentos
     nfkd_form = unicodedata.normalize('NFKD', str(text))
@@ -68,8 +88,23 @@ def remove_accents(text):
     return "".join([c for c in nfkd_form if not unicodedata.combining(c)])
     
 def load_data_with_join(db_path, filters=None):
-    """
-    Loads and joins data from tables, robustly applying dynamic filters.
+    """Loads and joins data from tables, applying dynamic filters.
+
+    This function executes an SQL query to join the `courses` and
+    `addresses` and applies filters based on the provided dictionary.
+
+    Args:
+        db_path (str or Path): The path to the SQLite database.
+        filters (dict, optional): A dictionary of filters to apply
+                                  in the consultation. The keys are the names of the
+                                  columns and the values ​​are the values ​​to
+                                  filter. Defaults to None.
+
+    Returns:
+        pd.DataFrame: A Pandas DataFrame with the filtered data.
+    
+    Raises:
+        ValueError: If an error occurs while loading the data.
     """
     base_query = """
     SELECT 
@@ -126,8 +161,15 @@ def load_data_with_join(db_path, filters=None):
             
 @st.cache_data
 def get_unique_values(db_path, table_name, column_name):
-    """
-    Fetches unique values ​​from a column, in a cached manner for performance.
+    """Search for unique values ​​from a database column in a cached manner.
+
+    Args:
+        db_path (str or Path): The path to the SQLite database.
+        table_name (str): The name of the table.
+        column_name (str): The name of the column.
+
+    Returns:
+        list: A list of unique values ​​from the specified column.
     """
     if not Path(db_path).exists():
         return []
@@ -145,8 +187,14 @@ def get_unique_values(db_path, table_name, column_name):
             conn.close()
             
 def format_to_brazilian_currency(number):
-    """
-    Formats a number to the Brazilian currency standard (BRL) using the locale library.
+    """Formats a number for the Brazilian currency standard (BRL).
+
+    Args:
+        number (float or int): The number to be formatted.
+
+    Returns:
+        str: The number formatted as currency (ex: R$ 1,234.56) or "R$ -" if
+             the entry is null.
     """
     if pd.isna(number):
         return "R$ -"
@@ -160,10 +208,13 @@ def format_to_brazilian_currency(number):
     return locale.currency(number, grouping=True)
 
 def replace_comma_with_dot(number):
-    """
-    Formats the number with thousand separators and removes the decimal places
+    """Formats a number with thousand-dot separators.
+
+    Args:
+        number (int or float): The number to be formatted.
+
+    Returns:
+        str: The number formatted with dots as thousands separators
+             (e.g. 1,234).
     """
     return f"{number:,.0f}".replace(",", ".")
-
-# def check_metric_column(metric):
-#     df_filtered = pd.read_sql_query(base_query, conn, params=params)
