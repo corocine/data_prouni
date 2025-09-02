@@ -3,7 +3,7 @@
 
 ## Descrição do Projeto
 
-Este projeto realiza uma análise exploratória dos dados do Programa Universidade para Todos (Prouni) em 2018. O objetivo é extrair insights sobre as bolsas de estudo oferecidas, os cursos, notas de corte, as mensalidades e a distribuição geográfica das instituições.
+Este projeto realiza uma análise exploratória dos dados do Programa Universidade para Todos (Prouni) em 2018. O objetivo é extrair insights sobre as bolsas de estudo oferecidas, os cursos, notas de corte, as mensalidades e a distribuição geográfica das instituições através de um dashboard interativo.
 
 ## Tecnologias Utilizadas
 
@@ -11,7 +11,6 @@ Este projeto realiza uma análise exploratória dos dados do Programa Universida
 * **Bibliotecas de Análise**: pandas
 * **Bibliotecas de Visualização**: Plotly
 * **Dashboard**: Streamlit
-* **Modelagem de Dados**: dbt (Data Build Tool)
 * **Banco de Dados**: SQLite
 * **Ambiente de Desenvolvimento**: Jupyter Notebook
 
@@ -32,20 +31,20 @@ Para executar este projeto localmente, siga os passos abaixo:
    source .venv/bin/activate  # No Windows, use: .venv\Scripts\activate
    ```
 3. **Instale as dependências:**
-   Como não há um arquivo `requirements.txt`, você pode instalar as bibliotecas necessárias manualmente:
+   Use o arquivo `requirements.txt` para instalar as dependências do projeto:
 
    ```bash
-   pip install pandas plotly streamlit dbt-sqlite jupyterlab
+   pip install -r requirements.txt
    ```
-4. **Execute a análise:**
-   Para explorar a análise de dados, inicie o Jupyter Lab:
+4. **Execute o Dashboard:**
+   Para visualizar o dashboard interativo, execute o seguinte comando:
+
+   ```bash
+   streamlit run src/main.py
+   ```
+
+   Para explorar a análise de dados nos notebooks, inicie o Jupyter Lab:
 
    ```bash
    jupyter lab
-   ```
-
-   Para visualizar o dashboard interativo (se houver um script `app.py` ou similar):
-
-   ```bash
-   streamlit run <NOME_DO_ARQUIVO_STREAMLIT>.py
    ```
