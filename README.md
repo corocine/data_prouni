@@ -1,62 +1,43 @@
 
 # Análise de Dados do Prouni 2018
 
-## Descrição do Projeto
+Um dashboard interativo para análise exploratória de dados sobre os cursos e bolsas de estudo do Prouni em 2018.
 
-Este projeto realiza uma análise exploratória dos dados do Programa Universidade para Todos (Prouni) em 2018. O objetivo é extrair insights sobre as bolsas de estudo oferecidas, os cursos, notas de corte, as mensalidades e a distribuição geográfica das instituições através de um dashboard interativo.
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.10%2B-red?style=for-the-badge&logo=streamlit)
+![Pandas](https://img.shields.io/badge/Pandas-1.4%2B-blue?style=for-the-badge&logo=pandas)
+![Plotly](https://img.shields.io/badge/Plotly-5.9%2B-purple?style=for-the-badge&logo=plotly)
+![SQLite](https://img.shields.io/badge/SQLite-3-blue?style=for-the-badge&logo=sqlite)
 
-## Tecnologias Utilizadas
+## 🔗 Link para Acesso
 
-* **Linguagem**: Python
-* **Bibliotecas de Análise**: pandas
-* **Bibliotecas de Visualização**: Plotly
-* **Dashboard**: Streamlit
-* **Banco de Dados**: SQLite
-* **Ambiente de Desenvolvimento**: Jupyter Notebook
+Acesse o dashboard interativo através do link:
 
-## Estrutura do Projeto
+![Preview da analise de dados proposta pelo projeto](/home/gabriel/Documentos/Estudos/data_prouni/image/analysis.gif "Preview")
 
-O projeto está organizado da seguinte forma:
+## 🚀 Sobre o Projeto
 
-- `data/`: Contém os bancos de dados SQLite.
-  - `prouni.sqlite`: Banco de dados original com os dados brutos.
-  - `clean_prouni.sqlite`: Banco de dados com os dados limpos e pré-processados, utilizado pela aplicação.
-- `notebooks/`: Contém os Jupyter Notebooks utilizados para a limpeza e análise exploratória inicial dos dados.
-- `src/`: Contém o código-fonte da aplicação.
-  - `main.py`: Ponto de entrada da aplicação Streamlit (o dashboard interativo).
-  - `utils.py`: Funções utilitárias para manipulação e carregamento de dados.
-- `requirements.txt`: Lista de dependências do projeto.
+Este projeto oferece uma ferramenta de visualização de dados para explorar as oportunidades do Programa Universidade para Todos (Prouni) com base nos dados de 2018. O objetivo é fornecer insights claros sobre:
 
-## Dados
+- Distribuição de bolsas de estudo.
+- Valores de mensalidade por curso e região.
+- Notas de corte.
+- Distribuição geográfica das instituições.
 
-O banco de dados `clean_prouni.sqlite` contém duas tabelas principais:
+## ✨ Funcionalidades
 
-- **`cursos`**: Armazena informações detalhadas sobre os cursos, incluindo nome, grau, turno, mensalidade, tipos de bolsa, notas de corte e informações sobre a universidade e o campus.
-- **`enderecos`**: Armazena informações de endereço dos campi, como município, UF e telefone.
+O dashboard interativo permite:
 
-As tabelas são relacionadas pelo campo `campus_id`.
+- **Filtros Dinâmicos**: Filtre os dados por curso, estado, universidade, turno e nível do curso.
+- **Métricas Chave**: Visualize rapidamente o total de cursos, mensalidades, universidades e bolsas.
+- **Rankings**: Descubra os 10 cursos e universidades com mais bolsas.
+- **Análise de Mensalidades**: Entenda a distribuição dos valores das mensalidades.
+- **Análise Geográfica**: Explore a distribuição de mensalidades e bolsas (cotas vs. ampla concorrência) no mapa do Brasil.
+- **Visualização de Dados**: Navegue pelos dados detalhados em uma tabela interativa.
 
-## Funcionalidades do Dashboard
+## 🛠️ Como Executar
 
-O dashboard interativo (`src/main.py`) oferece as seguintes funcionalidades:
-
-- **Filtros Dinâmicos**: Permite filtrar os dados por curso, estado (UF), universidade, período e nível.
-- **Métricas Principais**: Exibe métricas importantes como total de cursos, mensalidades mínima e máxima, número de universidades, e totais de bolsas.
-- **Rankings**: Gráficos de barras com o top 10 cursos e universidades por número de bolsas.
-- **Análise de Mensalidades**: Gráfico de box plot para analisar a distribuição das mensalidades por período.
-- **Relação Mensalidade vs. Bolsas**: Gráfico de dispersão para visualizar a correlação entre o valor da mensalidade e a quantidade de bolsas.
-- **Distribuição de Bolsas**: Gráficos de rosca e sunburst para mostrar a proporção de bolsas por nível e tipo.
-- **Análise Geográfica**: Mapa do Brasil (choropleth) com a média de mensalidades por estado e um gráfico de barras com a quantidade de bolsas (cotas vs. ampla concorrência) por estado.
-- **Tabela de Dados**: Exibe os dados filtrados em uma tabela paginada.
-
-## Visão Geral do Código
-
-- **`src/main.py`**: É o coração da aplicação Streamlit. Ele define a interface do usuário, os filtros, as métricas e os gráficos que compõem o dashboard.
-- **`src/utils.py`**: Contém funções auxiliares que são usadas no `main.py`. Isso inclui carregar dados do banco de dados, aplicar filtros, formatar valores monetários e de texto, e outras operações de pré-processamento.
-
-## Instalação
-
-Para executar este projeto localmente, siga os passos abaixo:
+Siga os passos abaixo para executar o projeto localmente.
 
 1. **Clone o repositório:**
 
@@ -68,23 +49,48 @@ Para executar este projeto localmente, siga os passos abaixo:
 
    ```bash
    python -m venv .venv
-   source .venv/bin/activate  # No Windows, use: .venv\Scripts\activate
+   source .venv/bin/activate  # No Windows: .venv\Scripts\activate
    ```
 3. **Instale as dependências:**
-   Use o arquivo `requirements.txt` para instalar as dependências do projeto:
 
    ```bash
    pip install -r requirements.txt
    ```
-4. **Execute o Dashboard:**
-   Para visualizar o dashboard interativo, execute o seguinte comando:
+4. **Execute a aplicação:**
 
    ```bash
    streamlit run src/main.py
    ```
 
-   Para explorar a análise de dados nos notebooks, inicie o Jupyter Lab:
+   A aplicação estará disponível em `http://localhost:8501`.
 
-   ```bash
-   jupyter lab
-   ```
+## 🗃️ Estrutura do Projeto
+
+```
+.
+├── data/
+│   ├── clean_prouni.sqlite  # Banco de dados utilizado pela aplicação
+│   └── prouni.sqlite        # Banco de dados original
+├── notebooks/
+│   ├── table1.ipynb         # Notebooks para análise e limpeza
+│   └── table2.ipynb
+├── src/
+│   ├── components/          # Módulos dos componentes do dashboard
+│   ├── main.py              # Ponto de entrada da aplicação Streamlit
+│   └── utils.py             # Funções utilitárias
+├── .gitignore
+├── LICENSE
+├── README.md
+└── requirements.txt
+```
+
+## 📊 Dados
+
+Os dados foram extraídos de uma fonte pública e pré-processados para esta análise. O banco de dados limpo (`clean_prouni.sqlite`) contém tabelas sobre cursos e endereços das instituições, relacionando informações como nome do curso, mensalidade, notas de corte e localização.
+
+- **Fonte**: [Brasil.io
+  ](https://brasil.io/dataset/cursos-prouni/cursos/)
+
+---
+
+[Gabriel Corocine](https://github.com/corocine)

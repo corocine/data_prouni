@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import requests
+import textwrap
 
 def show_charts(df_filtred: pd.DataFrame):
     """
@@ -25,70 +26,101 @@ def show_charts(df_filtred: pd.DataFrame):
     graphic1, graphic2 = st.columns(2)
     df_graphics_ranking = df_filtred.copy()
 
-    with graphic1:    
+    with graphic1:
         columns_to_sum = [
             'bolsa_integral_cotas',
             'bolsa_parcial_cotas',
             'bolsa_integral',
             'bolsa_parcial'
         ]
-        
         df_graphics_ranking['total_bolsas'] = df_graphics_ranking[columns_to_sum].sum(axis=1)
 
         ranking_schools = df_graphics_ranking.groupby('universidade')['total_bolsas'].sum().nlargest(10).sort_values(ascending=True)
-        
+
         if not ranking_schools.empty:
+            
+            formatted_labels = ['<br>'.join(textwrap.wrap(label, 40)) for label in ranking_schools.index]
+
+            max_value = ranking_schools.max()
+            text_positions = []
+            text_font_colors = []
+            for value in ranking_schools:
+                if value < max_value * 0.30:
+                    text_positions.append('outside')
+                    text_font_colors.append('black')
+                else:
+                    text_positions.append('inside')
+                    text_font_colors.append('white')
+
             fig_ranking_schools = px.bar(
-                ranking_schools,
-                x='total_bolsas',
-                y=ranking_schools.index,
+                x=ranking_schools.values, 
+                y=formatted_labels,   
                 orientation='h',
-                labels={'total_bolsas': 'Total de Bolsas', 'y': 'Universidade'},
-                text='total_bolsas',
+                labels={'x': 'Total de Bolsas', 'y': 'Universidade'},
+                text=ranking_schools.values,
                 color_discrete_sequence=[PRIMARY_COLOR]
             )
-            
+
             fig_ranking_schools.update_traces(
-                hovertemplate='<b>Universidade:</b> %{y}<br><b>Total de Bolsas:</b> %{x:,.0f}<extra></extra>',
+                hovertemplate='<b>Universidade:</b> %{customdata}<br><b>Total de Bolsas:</b> %{x:,.0f}<extra></extra>',
+                customdata=ranking_schools.index, 
                 texttemplate='%{x:,.0f}',
-                textposition='outside'
+                textposition=text_positions,
+                textfont_color=text_font_colors
             )
-            
+
             fig_ranking_schools.update_layout(
-                title_text="Top 10 Cursos por Total de Bolsas",
-                title_x=0.5,         
-                title_xanchor="center"
+                title_text="Top 10 Universidades por Total de Bolsas",
+                title_x=0.5,
+                title_xanchor="center",
+                margin=dict(l=150, r=50, t=50, b=50)
             )
-            
+
             st.plotly_chart(fig_ranking_schools, use_container_width=True)
         else:
             st.warning("Nenhum dado de universidade para exibir com os filtros atuais.")
 
     with graphic2:
-        
+
         ranking_courses = df_graphics_ranking.groupby('curso')['total_bolsas'].sum().nlargest(10).sort_values(ascending=True)
 
         if not ranking_courses.empty:
+  
+            formatted_labels_courses = ['<br>'.join(textwrap.wrap(label, 30)) for label in ranking_courses.index]
+            
+            max_value_courses = ranking_courses.max()
+            text_positions_courses = []
+            text_font_colors_courses = []
+            for value in ranking_courses:
+                if value < max_value_courses * 0.25:
+                    text_positions_courses.append('outside')
+                    text_font_colors_courses.append('black')
+                else:
+                    text_positions_courses.append('inside')
+                    text_font_colors_courses.append('white')
+
             fig_ranking_courses = px.bar(
-                ranking_courses,
-                x='total_bolsas',
-                y=ranking_courses.index,
+                x=ranking_courses.values,
+                y=formatted_labels_courses,
                 orientation='h',
-                labels={'total_bolsas': 'Total de Bolsas', 'y': 'Curso'},
-                text='total_bolsas',
+                labels={'x': 'Total de Bolsas', 'y': 'Curso'},
+                text=ranking_courses.values,
                 color_discrete_sequence=[PRIMARY_COLOR]
             )
-            
+
             fig_ranking_courses.update_traces(
-                hovertemplate='<b>Curso:</b> %{y}<br><b>Total de Bolsas:</b> %{x:,.0f}<extra></extra>',
+                hovertemplate='<b>Curso:</b> %{customdata}<br><b>Total de Bolsas:</b> %{x:,.0f}<extra></extra>',
+                customdata=ranking_courses.index,
                 texttemplate='%{x:,.0f}',
-                textposition='outside'
+                textposition=text_positions_courses,
+                textfont_color=text_font_colors_courses
             )
-            
+
             fig_ranking_courses.update_layout(
                 title_text="Top 10 Cursos por Total de Bolsas",
-                title_x=0.5,         
-                title_xanchor="center"
+                title_x=0.5,
+                title_xanchor="center",
+                margin=dict(l=150, r=50, t=50, b=50) # Margens generosas
             )
             st.plotly_chart(fig_ranking_courses, use_container_width=True)
         else:
@@ -233,7 +265,7 @@ def show_charts(df_filtred: pd.DataFrame):
         locations='estado',
         featureidkey='properties.sigla',
         color='mensalidade',
-        color_continuous_scale='Blues',
+        color_continuous_scale=SCALE_COLOR_MAP,
         scope='south america',
         labels={'mensalidade': 'Mensalidade Média (R$)', 'uf_busca': 'Estado'}
     )
@@ -261,22 +293,22 @@ def show_charts(df_filtred: pd.DataFrame):
     st.subheader("Quantidade de Bolsas (Cotas vs. Ampla) ofertadas por Estado")
     st.info("Como foi a distribuição de bolsas por estado?")
 
-    df_barras = df_filtred.copy()
+    df_bars = df_filtred.copy()
 
     cols_quotas = ['bolsa_integral_cotas', 'bolsa_parcial_cotas']
     cols_general = ['bolsa_integral', 'bolsa_parcial']
 
-    df_barras['total_bolsas_cotas'] = df_barras[cols_quotas].sum(axis=1)
-    df_barras['total_bolsas_ampla'] = df_barras[cols_general].sum(axis=1)
+    df_bars['total_bolsas_cotas'] = df_bars[cols_quotas].sum(axis=1)
+    df_bars['total_bolsas_ampla'] = df_bars[cols_general].sum(axis=1)
 
-    df_agrupado = df_barras.groupby('estado')[['total_bolsas_cotas', 'total_bolsas_ampla']].sum().reset_index()
+    df_groupby = df_bars.groupby('estado')[['total_bolsas_cotas', 'total_bolsas_ampla']].sum().reset_index()
 
-    df_agrupado['total_geral'] = df_agrupado['total_bolsas_cotas'] + df_agrupado['total_bolsas_ampla']
+    df_groupby['total_geral'] = df_groupby['total_bolsas_cotas'] + df_groupby['total_bolsas_ampla']
 
-    df_agrupado = df_agrupado.sort_values(by='total_geral', ascending=False)
+    df_groupby = df_groupby.sort_values(by='total_geral', ascending=False)
 
-    fig_barras = px.bar(
-        df_agrupado,
+    fig_bars = px.bar(
+        df_groupby,
         x='estado',
         y=['total_bolsas_cotas', 'total_bolsas_ampla'],
         title='',
@@ -288,8 +320,8 @@ def show_charts(df_filtred: pd.DataFrame):
     )
 
     new_names = {'total_bolsas_cotas': 'Bolsas para Cotas', 'total_bolsas_ampla': 'Bolsas - Ampla Concorrência'}
-    fig_barras.for_each_trace(lambda t: t.update(name = new_names[t.name]))
-    fig_barras.update_traces(
+    fig_bars.for_each_trace(lambda t: t.update(name = new_names[t.name]))
+    fig_bars.update_traces(
         hovertemplate="<br><b>Estado</b>: %{x}<br><b>Tipo</b>: %{fullData.name}<br><b>Quantidade</b>: %{y:,.0f}<extra></extra>"
     )
-    st.plotly_chart(fig_barras, use_container_width=True)
+    st.plotly_chart(fig_bars, use_container_width=True)
