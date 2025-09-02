@@ -6,7 +6,6 @@ import numpy as np
 import sqlite3
 from pathlib import Path
 import streamlit as st
-import locale
 
 def clean_phone(phone_column):
     """Clears and normalizes a phone number.
@@ -196,16 +195,15 @@ def format_to_brazilian_currency(number):
         str: The number formatted as currency (ex: R$ 1,234.56) or "R$ -" if
              the entry is null.
     """
-    if pd.isna(number):
+    if number is None or not isinstance(number, (int, float)):
         return "R$ -"
-    try:
-        # Linux/MacOS
-        locale.setlocale(locale.LC_MONETARY, 'pt_BR.UTF-8')
-    except locale.Error:
-        # Windows
-        locale.setlocale(locale.LC_MONETARY, 'Portuguese_Brazil.1252')
 
-    return locale.currency(number, grouping=True)
+    # Formata com vírgula para milhar e ponto para decimal (padrão americano)
+    formatted_str = f'{number:,.2f}'
+
+    formatted_str = formatted_str.replace(',', 'X').replace('.', ',').replace('X', '.')
+
+    return f'R$ {formatted_str}'
 
 def replace_comma_with_dot(number):
     """Formats a number with thousand-dot separators.
