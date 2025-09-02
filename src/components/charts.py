@@ -47,7 +47,7 @@ def show_charts(df_filtred: pd.DataFrame):
             for value in ranking_schools:
                 if value < max_value * 0.30:
                     text_positions.append('outside')
-                    text_font_colors.append('black')
+                    text_font_colors.append(GRAY_COLOR)
                 else:
                     text_positions.append('inside')
                     text_font_colors.append('white')
@@ -94,7 +94,7 @@ def show_charts(df_filtred: pd.DataFrame):
             for value in ranking_courses:
                 if value < max_value_courses * 0.25:
                     text_positions_courses.append('outside')
-                    text_font_colors_courses.append('black')
+                    text_font_colors_courses.append(GRAY_COLOR)
                 else:
                     text_positions_courses.append('inside')
                     text_font_colors_courses.append('white')
@@ -120,7 +120,7 @@ def show_charts(df_filtred: pd.DataFrame):
                 title_text="Top 10 Cursos por Total de Bolsas",
                 title_x=0.5,
                 title_xanchor="center",
-                margin=dict(l=150, r=50, t=50, b=50) # Margens generosas
+                margin=dict(l=150, r=50, t=50, b=50)
             )
             st.plotly_chart(fig_ranking_courses, use_container_width=True)
         else:
@@ -290,7 +290,7 @@ def show_charts(df_filtred: pd.DataFrame):
 
     st.markdown('---')
 
-    st.subheader("Quantidade de Bolsas (Cotas vs. Ampla) ofertadas por Estado")
+    st.subheader("Quantidade de Bolsas (Cotas vs. Ampla) Ofertadas por Estado")
     st.info("Como foi a distribuição de bolsas por estado?")
 
     df_bars = df_filtred.copy()
