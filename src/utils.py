@@ -6,6 +6,7 @@ import numpy as np
 import sqlite3
 from pathlib import Path
 import streamlit as st
+import locale
 
 def clean_phone(phone_column):
     """
@@ -142,3 +143,27 @@ def get_unique_values(db_path, table_name, column_name):
     finally:
         if conn:
             conn.close()
+            
+def format_to_brazilian_currency(number):
+    """
+    Formats a number to the Brazilian currency standard (BRL) using the locale library.
+    """
+    if pd.isna(number):
+        return "R$ -"
+    try:
+        # Linux/MacOS
+        locale.setlocale(locale.LC_MONETARY, 'pt_BR.UTF-8')
+    except locale.Error:
+        # Windows
+        locale.setlocale(locale.LC_MONETARY, 'Portuguese_Brazil.1252')
+
+    return locale.currency(number, grouping=True)
+
+def replace_comma_with_dot(number):
+    """
+    Formats the number with thousand separators and removes the decimal places
+    """
+    return f"{number:,.0f}".replace(",", ".")
+
+# def check_metric_column(metric):
+#     df_filtered = pd.read_sql_query(base_query, conn, params=params)
