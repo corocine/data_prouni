@@ -6,7 +6,6 @@ import numpy as np
 import sqlite3
 from pathlib import Path
 import streamlit as st
-import locale
 
 def clean_phone(phone_column):
     """Clears and normalizes a phone number.
