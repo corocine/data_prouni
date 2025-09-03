@@ -1,4 +1,3 @@
-
 # Análise de Dados do Prouni 2018
 
 Um dashboard interativo para análise exploratória de dados sobre os cursos e bolsas de estudo do Prouni em 2018.
@@ -11,7 +10,7 @@ Um dashboard interativo para análise exploratória de dados sobre os cursos e b
 
 ## 🔗 Link para Acesso
 
-Acesse o dashboard interativo através do link:
+- Acesse o dashboard interativo através do link: https://dataprouni-gabrielcorocine.streamlit.app/
 
 ![Preview da analise de dados proposta pelo projeto](/home/gabriel/Documentos/Estudos/data_prouni/image/analysis.gif "Preview")
 
