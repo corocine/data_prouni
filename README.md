@@ -20,7 +20,7 @@ Este projeto oferece uma ferramenta de visualização de dados para explorar as 
 
 - Distribuição de bolsas de estudo.
 - Valores de mensalidade por curso e região.
-- Notas de corte.
+- Notas de corte para acesso as bolsas.
 - Distribuição geográfica das instituições.
 
 ## ✨ Funcionalidades
